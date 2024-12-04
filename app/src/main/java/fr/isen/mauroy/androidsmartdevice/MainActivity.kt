@@ -1,3 +1,8 @@
+package fr.isen.mauroy.androidsmartdevice
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,16 +21,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import android.content.Intent
 import fr.isen.mauroy.androidsmartdevice.R
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MainScreen()
+        }
+    }
+}
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween // Spreads components vertically
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         // Title
         Text(
@@ -66,7 +83,11 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
         // Start Button
         Button(
-            onClick = { /* TODO: Navigate to Scan Activity */ },
+            onClick = {
+                // Create an Intent to start ScanActivity
+                val intent = Intent(context, ScanActivity::class.java)
+                context.startActivity(intent) // Start the activity
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 32.dp)
