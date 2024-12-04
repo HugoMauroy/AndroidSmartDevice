@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.content.pm.PackageManager // <-- Ensure this import is included
-import androidx.compose.ui.platform.LocalContext // <-- Add this import
+import android.content.pm.PackageManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 
 class ScanActivity : ComponentActivity() {
@@ -37,13 +37,13 @@ class ScanActivity : ComponentActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private var isScanning by mutableStateOf(false)
 
-    private val scanTimeout = 30_000L  // 30 seconds
+    private val scanTimeout = 30_000L
     private var scanReceiver: BroadcastReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Register the Bluetooth state change receiver
+
         val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
         scanReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -51,7 +51,7 @@ class ScanActivity : ComponentActivity() {
                 if (BluetoothAdapter.ACTION_STATE_CHANGED == action) {
                     val state = intent?.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
                     if (state == BluetoothAdapter.STATE_ON) {
-                        // Bluetooth is enabled, proceed with scan
+
                         startBluetoothScan()
                     }
                 }
@@ -59,13 +59,13 @@ class ScanActivity : ComponentActivity() {
         }
         registerReceiver(scanReceiver, filter)
 
-        // Register the activity result launcher to handle Bluetooth enable intent
+
         enableBtLauncher = registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                // Bluetooth enabled, proceed with scanning
+
                 startBluetoothScan()
             } else {
-                // Bluetooth not enabled
+
                 Toast.makeText(this, "Bluetooth is required to scan devices", Toast.LENGTH_SHORT).show()
             }
         }
